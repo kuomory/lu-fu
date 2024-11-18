@@ -13,25 +13,35 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as EditTemplateImport } from './routes/_editTemplate'
 
 // Create Virtual Routes
 
-const EditLazyImport = createFileRoute('/edit')()
 const IndexLazyImport = createFileRoute('/')()
+const EditTemplateEditIndexLazyImport = createFileRoute(
+  '/_editTemplate/edit/',
+)()
 
 // Create/Update Routes
 
-const EditLazyRoute = EditLazyImport.update({
-  id: '/edit',
-  path: '/edit',
+const EditTemplateRoute = EditTemplateImport.update({
+  id: '/_editTemplate',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/edit.lazy').then((d) => d.Route))
+} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const EditTemplateEditIndexLazyRoute = EditTemplateEditIndexLazyImport.update({
+  id: '/edit/',
+  path: '/edit/',
+  getParentRoute: () => EditTemplateRoute,
+} as any).lazy(() =>
+  import('./routes/_editTemplate/edit/index.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -44,51 +54,73 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/edit': {
-      id: '/edit'
+    '/_editTemplate': {
+      id: '/_editTemplate'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof EditTemplateImport
+      parentRoute: typeof rootRoute
+    }
+    '/_editTemplate/edit/': {
+      id: '/_editTemplate/edit/'
       path: '/edit'
       fullPath: '/edit'
-      preLoaderRoute: typeof EditLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof EditTemplateEditIndexLazyImport
+      parentRoute: typeof EditTemplateImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface EditTemplateRouteChildren {
+  EditTemplateEditIndexLazyRoute: typeof EditTemplateEditIndexLazyRoute
+}
+
+const EditTemplateRouteChildren: EditTemplateRouteChildren = {
+  EditTemplateEditIndexLazyRoute: EditTemplateEditIndexLazyRoute,
+}
+
+const EditTemplateRouteWithChildren = EditTemplateRoute._addFileChildren(
+  EditTemplateRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/edit': typeof EditLazyRoute
+  '': typeof EditTemplateRouteWithChildren
+  '/edit': typeof EditTemplateEditIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
-  '/edit': typeof EditLazyRoute
+  '': typeof EditTemplateRouteWithChildren
+  '/edit': typeof EditTemplateEditIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
-  '/edit': typeof EditLazyRoute
+  '/_editTemplate': typeof EditTemplateRouteWithChildren
+  '/_editTemplate/edit/': typeof EditTemplateEditIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/edit'
+  fullPaths: '/' | '' | '/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/edit'
-  id: '__root__' | '/' | '/edit'
+  to: '/' | '' | '/edit'
+  id: '__root__' | '/' | '/_editTemplate' | '/_editTemplate/edit/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  EditLazyRoute: typeof EditLazyRoute
+  EditTemplateRoute: typeof EditTemplateRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  EditLazyRoute: EditLazyRoute,
+  EditTemplateRoute: EditTemplateRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -102,14 +134,21 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/edit"
+        "/_editTemplate"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
-    "/edit": {
-      "filePath": "edit.lazy.tsx"
+    "/_editTemplate": {
+      "filePath": "_editTemplate.tsx",
+      "children": [
+        "/_editTemplate/edit/"
+      ]
+    },
+    "/_editTemplate/edit/": {
+      "filePath": "_editTemplate/edit/index.lazy.tsx",
+      "parent": "/_editTemplate"
     }
   }
 }
