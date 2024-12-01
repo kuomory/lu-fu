@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import Top from "../components/AppShell/Top";
-import { SlideMock } from "../components/AppShell/SlideMock";
+import Top from "../components/TopPage/Top";
+import { SlideMock } from "../components/TopPage/SlideMock";
 import { Box } from "@mantine/core";
 
 export const Route = createLazyFileRoute("/")({
