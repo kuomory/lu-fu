@@ -14,6 +14,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as EditTemplateImport } from './routes/_editTemplate'
+import { Route as PresentationIndexImport } from './routes/presentation/index'
+import { Route as PresentationPageNumImport } from './routes/presentation/$pageNum'
 
 // Create Virtual Routes
 
@@ -34,6 +36,18 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const PresentationIndexRoute = PresentationIndexImport.update({
+  id: '/presentation/',
+  path: '/presentation/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PresentationPageNumRoute = PresentationPageNumImport.update({
+  id: '/presentation/$pageNum',
+  path: '/presentation/$pageNum',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const EditTemplateEditIndexLazyRoute = EditTemplateEditIndexLazyImport.update({
   id: '/edit/',
@@ -59,6 +73,20 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof EditTemplateImport
+      parentRoute: typeof rootRoute
+    }
+    '/presentation/$pageNum': {
+      id: '/presentation/$pageNum'
+      path: '/presentation/$pageNum'
+      fullPath: '/presentation/$pageNum'
+      preLoaderRoute: typeof PresentationPageNumImport
+      parentRoute: typeof rootRoute
+    }
+    '/presentation/': {
+      id: '/presentation/'
+      path: '/presentation'
+      fullPath: '/presentation'
+      preLoaderRoute: typeof PresentationIndexImport
       parentRoute: typeof rootRoute
     }
     '/_editTemplate/edit/': {
@@ -88,12 +116,16 @@ const EditTemplateRouteWithChildren = EditTemplateRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '': typeof EditTemplateRouteWithChildren
+  '/presentation/$pageNum': typeof PresentationPageNumRoute
+  '/presentation': typeof PresentationIndexRoute
   '/edit': typeof EditTemplateEditIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '': typeof EditTemplateRouteWithChildren
+  '/presentation/$pageNum': typeof PresentationPageNumRoute
+  '/presentation': typeof PresentationIndexRoute
   '/edit': typeof EditTemplateEditIndexLazyRoute
 }
 
@@ -101,26 +133,38 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/_editTemplate': typeof EditTemplateRouteWithChildren
+  '/presentation/$pageNum': typeof PresentationPageNumRoute
+  '/presentation/': typeof PresentationIndexRoute
   '/_editTemplate/edit/': typeof EditTemplateEditIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/edit'
+  fullPaths: '/' | '' | '/presentation/$pageNum' | '/presentation' | '/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/edit'
-  id: '__root__' | '/' | '/_editTemplate' | '/_editTemplate/edit/'
+  to: '/' | '' | '/presentation/$pageNum' | '/presentation' | '/edit'
+  id:
+    | '__root__'
+    | '/'
+    | '/_editTemplate'
+    | '/presentation/$pageNum'
+    | '/presentation/'
+    | '/_editTemplate/edit/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   EditTemplateRoute: typeof EditTemplateRouteWithChildren
+  PresentationPageNumRoute: typeof PresentationPageNumRoute
+  PresentationIndexRoute: typeof PresentationIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   EditTemplateRoute: EditTemplateRouteWithChildren,
+  PresentationPageNumRoute: PresentationPageNumRoute,
+  PresentationIndexRoute: PresentationIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -134,7 +178,9 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_editTemplate"
+        "/_editTemplate",
+        "/presentation/$pageNum",
+        "/presentation/"
       ]
     },
     "/": {
@@ -145,6 +191,12 @@ export const routeTree = rootRoute
       "children": [
         "/_editTemplate/edit/"
       ]
+    },
+    "/presentation/$pageNum": {
+      "filePath": "presentation/$pageNum.tsx"
+    },
+    "/presentation/": {
+      "filePath": "presentation/index.tsx"
     },
     "/_editTemplate/edit/": {
       "filePath": "_editTemplate/edit/index.lazy.tsx",

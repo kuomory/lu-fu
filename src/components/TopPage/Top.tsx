@@ -22,9 +22,25 @@ export default function Top() {
             </Text>
             <Divider w="100%" mt="xs" />
             <Group w="100%" justify="center" my="xs">
-              <Button variant="rich" size="lg" leftSection={<IconPlayerPlay />}>
-                プレゼンテーションを開始
-              </Button>
+              <Link
+                to="/presentation"
+                onClick={() => {
+                  if (
+                    document.fullscreenElement == null &&
+                    document.fullscreenEnabled
+                  )
+                    document.body.requestFullscreen();
+                }}
+              >
+                <Button
+                  component="span"
+                  variant="rich"
+                  size="lg"
+                  leftSection={<IconPlayerPlay />}
+                >
+                  プレゼンテーションを開始
+                </Button>
+              </Link>
               <Link to="/edit">
                 <Button
                   component="span"

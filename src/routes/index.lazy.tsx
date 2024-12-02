@@ -1,7 +1,8 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import Top from "../components/TopPage/Top";
-import { SlideMock } from "../components/TopPage/SlideMock";
+import { SlideMock } from "../components/Presentation/SlideMock";
 import { Box } from "@mantine/core";
+import { SlideTop } from "../components/Presentation/SlideTop";
 
 export const Route = createLazyFileRoute("/")({
   component: Page,
@@ -20,7 +21,7 @@ function Page() {
           zIndex: -2,
         }}
       >
-        <SlideMock />
+        <SlideTop pageNum={1} />
       </Box>
       <Box
         w="100vw"
