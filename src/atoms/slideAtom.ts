@@ -10,6 +10,7 @@ export type SvgObject<T extends ElementType & string> = {
 };
 
 export type Page = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   objects: SvgObject<any>[];
   backgroundColor?: string;
   templateId?: string;

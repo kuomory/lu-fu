@@ -4,8 +4,10 @@ import { useState, useCallback } from "react";
 
 export function DownloadButton() {
   const [fileName, setFileName] = useState(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (window as any).myStore?.fileName ?? ""
   );
+  setFileName; // eslint避け
   const handleSave = useCallback(async () => {
     const myStore = { fileName: fileName };
     const htmlContent = document.documentElement.outerHTML;

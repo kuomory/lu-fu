@@ -8,129 +8,129 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as PresentationTemplateImport } from './routes/_presentationTemplate'
-import { Route as EditTemplateImport } from './routes/_editTemplate'
-import { Route as PresentationTemplatePresentationIndexImport } from './routes/_presentationTemplate/presentation/index'
-import { Route as PresentationTemplatePresentationPageNumImport } from './routes/_presentationTemplate/presentation/$pageNum'
+import { Route as rootRoute } from "./routes/__root";
+import { Route as PresentationTemplateImport } from "./routes/_presentationTemplate";
+import { Route as EditTemplateImport } from "./routes/_editTemplate";
+import { Route as PresentationTemplatePresentationIndexImport } from "./routes/_presentationTemplate/presentation/index";
+import { Route as PresentationTemplatePresentationPageNumImport } from "./routes/_presentationTemplate/presentation/$pageNum";
 
 // Create Virtual Routes
 
-const IndexLazyImport = createFileRoute('/')()
+const IndexLazyImport = createFileRoute("/")();
 const EditTemplateEditIndexLazyImport = createFileRoute(
-  '/_editTemplate/edit/',
-)()
+  "/_editTemplate/edit/"
+)();
 
 // Create/Update Routes
 
 const PresentationTemplateRoute = PresentationTemplateImport.update({
-  id: '/_presentationTemplate',
+  id: "/_presentationTemplate",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const EditTemplateRoute = EditTemplateImport.update({
-  id: '/_editTemplate',
+  id: "/_editTemplate",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const IndexLazyRoute = IndexLazyImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+} as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route));
 
 const EditTemplateEditIndexLazyRoute = EditTemplateEditIndexLazyImport.update({
-  id: '/edit/',
-  path: '/edit/',
+  id: "/edit/",
+  path: "/edit/",
   getParentRoute: () => EditTemplateRoute,
 } as any).lazy(() =>
-  import('./routes/_editTemplate/edit/index.lazy').then((d) => d.Route),
-)
+  import("./routes/_editTemplate/edit/index.lazy").then((d) => d.Route)
+);
 
 const PresentationTemplatePresentationIndexRoute =
   PresentationTemplatePresentationIndexImport.update({
-    id: '/presentation/',
-    path: '/presentation/',
+    id: "/presentation/",
+    path: "/presentation/",
     getParentRoute: () => PresentationTemplateRoute,
-  } as any)
+  } as any);
 
 const PresentationTemplatePresentationPageNumRoute =
   PresentationTemplatePresentationPageNumImport.update({
-    id: '/presentation/$pageNum',
-    path: '/presentation/$pageNum',
+    id: "/presentation/$pageNum",
+    path: "/presentation/$pageNum",
     getParentRoute: () => PresentationTemplateRoute,
-  } as any)
+  } as any);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/_editTemplate': {
-      id: '/_editTemplate'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof EditTemplateImport
-      parentRoute: typeof rootRoute
-    }
-    '/_presentationTemplate': {
-      id: '/_presentationTemplate'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof PresentationTemplateImport
-      parentRoute: typeof rootRoute
-    }
-    '/_presentationTemplate/presentation/$pageNum': {
-      id: '/_presentationTemplate/presentation/$pageNum'
-      path: '/presentation/$pageNum'
-      fullPath: '/presentation/$pageNum'
-      preLoaderRoute: typeof PresentationTemplatePresentationPageNumImport
-      parentRoute: typeof PresentationTemplateImport
-    }
-    '/_presentationTemplate/presentation/': {
-      id: '/_presentationTemplate/presentation/'
-      path: '/presentation'
-      fullPath: '/presentation'
-      preLoaderRoute: typeof PresentationTemplatePresentationIndexImport
-      parentRoute: typeof PresentationTemplateImport
-    }
-    '/_editTemplate/edit/': {
-      id: '/_editTemplate/edit/'
-      path: '/edit'
-      fullPath: '/edit'
-      preLoaderRoute: typeof EditTemplateEditIndexLazyImport
-      parentRoute: typeof EditTemplateImport
-    }
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexLazyImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/_editTemplate": {
+      id: "/_editTemplate";
+      path: "";
+      fullPath: "";
+      preLoaderRoute: typeof EditTemplateImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/_presentationTemplate": {
+      id: "/_presentationTemplate";
+      path: "";
+      fullPath: "";
+      preLoaderRoute: typeof PresentationTemplateImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/_presentationTemplate/presentation/$pageNum": {
+      id: "/_presentationTemplate/presentation/$pageNum";
+      path: "/presentation/$pageNum";
+      fullPath: "/presentation/$pageNum";
+      preLoaderRoute: typeof PresentationTemplatePresentationPageNumImport;
+      parentRoute: typeof PresentationTemplateImport;
+    };
+    "/_presentationTemplate/presentation/": {
+      id: "/_presentationTemplate/presentation/";
+      path: "/presentation";
+      fullPath: "/presentation";
+      preLoaderRoute: typeof PresentationTemplatePresentationIndexImport;
+      parentRoute: typeof PresentationTemplateImport;
+    };
+    "/_editTemplate/edit/": {
+      id: "/_editTemplate/edit/";
+      path: "/edit";
+      fullPath: "/edit";
+      preLoaderRoute: typeof EditTemplateEditIndexLazyImport;
+      parentRoute: typeof EditTemplateImport;
+    };
   }
 }
 
 // Create and export the route tree
 
 interface EditTemplateRouteChildren {
-  EditTemplateEditIndexLazyRoute: typeof EditTemplateEditIndexLazyRoute
+  EditTemplateEditIndexLazyRoute: typeof EditTemplateEditIndexLazyRoute;
 }
 
 const EditTemplateRouteChildren: EditTemplateRouteChildren = {
   EditTemplateEditIndexLazyRoute: EditTemplateEditIndexLazyRoute,
-}
+};
 
 const EditTemplateRouteWithChildren = EditTemplateRoute._addFileChildren(
-  EditTemplateRouteChildren,
-)
+  EditTemplateRouteChildren
+);
 
 interface PresentationTemplateRouteChildren {
-  PresentationTemplatePresentationPageNumRoute: typeof PresentationTemplatePresentationPageNumRoute
-  PresentationTemplatePresentationIndexRoute: typeof PresentationTemplatePresentationIndexRoute
+  PresentationTemplatePresentationPageNumRoute: typeof PresentationTemplatePresentationPageNumRoute;
+  PresentationTemplatePresentationIndexRoute: typeof PresentationTemplatePresentationIndexRoute;
 }
 
 const PresentationTemplateRouteChildren: PresentationTemplateRouteChildren = {
@@ -138,68 +138,68 @@ const PresentationTemplateRouteChildren: PresentationTemplateRouteChildren = {
     PresentationTemplatePresentationPageNumRoute,
   PresentationTemplatePresentationIndexRoute:
     PresentationTemplatePresentationIndexRoute,
-}
+};
 
 const PresentationTemplateRouteWithChildren =
-  PresentationTemplateRoute._addFileChildren(PresentationTemplateRouteChildren)
+  PresentationTemplateRoute._addFileChildren(PresentationTemplateRouteChildren);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
-  '': typeof PresentationTemplateRouteWithChildren
-  '/presentation/$pageNum': typeof PresentationTemplatePresentationPageNumRoute
-  '/presentation': typeof PresentationTemplatePresentationIndexRoute
-  '/edit': typeof EditTemplateEditIndexLazyRoute
+  "/": typeof IndexLazyRoute;
+  "": typeof PresentationTemplateRouteWithChildren;
+  "/presentation/$pageNum": typeof PresentationTemplatePresentationPageNumRoute;
+  "/presentation": typeof PresentationTemplatePresentationIndexRoute;
+  "/edit": typeof EditTemplateEditIndexLazyRoute;
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
-  '': typeof PresentationTemplateRouteWithChildren
-  '/presentation/$pageNum': typeof PresentationTemplatePresentationPageNumRoute
-  '/presentation': typeof PresentationTemplatePresentationIndexRoute
-  '/edit': typeof EditTemplateEditIndexLazyRoute
+  "/": typeof IndexLazyRoute;
+  "": typeof PresentationTemplateRouteWithChildren;
+  "/presentation/$pageNum": typeof PresentationTemplatePresentationPageNumRoute;
+  "/presentation": typeof PresentationTemplatePresentationIndexRoute;
+  "/edit": typeof EditTemplateEditIndexLazyRoute;
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
-  '/_editTemplate': typeof EditTemplateRouteWithChildren
-  '/_presentationTemplate': typeof PresentationTemplateRouteWithChildren
-  '/_presentationTemplate/presentation/$pageNum': typeof PresentationTemplatePresentationPageNumRoute
-  '/_presentationTemplate/presentation/': typeof PresentationTemplatePresentationIndexRoute
-  '/_editTemplate/edit/': typeof EditTemplateEditIndexLazyRoute
+  __root__: typeof rootRoute;
+  "/": typeof IndexLazyRoute;
+  "/_editTemplate": typeof EditTemplateRouteWithChildren;
+  "/_presentationTemplate": typeof PresentationTemplateRouteWithChildren;
+  "/_presentationTemplate/presentation/$pageNum": typeof PresentationTemplatePresentationPageNumRoute;
+  "/_presentationTemplate/presentation/": typeof PresentationTemplatePresentationIndexRoute;
+  "/_editTemplate/edit/": typeof EditTemplateEditIndexLazyRoute;
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/presentation/$pageNum' | '/presentation' | '/edit'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/presentation/$pageNum' | '/presentation' | '/edit'
+  fileRoutesByFullPath: FileRoutesByFullPath;
+  fullPaths: "/" | "" | "/presentation/$pageNum" | "/presentation" | "/edit";
+  fileRoutesByTo: FileRoutesByTo;
+  to: "/" | "" | "/presentation/$pageNum" | "/presentation" | "/edit";
   id:
-    | '__root__'
-    | '/'
-    | '/_editTemplate'
-    | '/_presentationTemplate'
-    | '/_presentationTemplate/presentation/$pageNum'
-    | '/_presentationTemplate/presentation/'
-    | '/_editTemplate/edit/'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/_editTemplate"
+    | "/_presentationTemplate"
+    | "/_presentationTemplate/presentation/$pageNum"
+    | "/_presentationTemplate/presentation/"
+    | "/_editTemplate/edit/";
+  fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
-  EditTemplateRoute: typeof EditTemplateRouteWithChildren
-  PresentationTemplateRoute: typeof PresentationTemplateRouteWithChildren
+  IndexLazyRoute: typeof IndexLazyRoute;
+  EditTemplateRoute: typeof EditTemplateRouteWithChildren;
+  PresentationTemplateRoute: typeof PresentationTemplateRouteWithChildren;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   EditTemplateRoute: EditTemplateRouteWithChildren,
   PresentationTemplateRoute: PresentationTemplateRouteWithChildren,
-}
+};
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
 /* ROUTE_MANIFEST_START
 {

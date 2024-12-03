@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import { slideAtom } from "../../atoms/slideAtom";
 import { Box, UnstyledButton } from "@mantine/core";
 import { ShapeObject } from "./ShapeObject";

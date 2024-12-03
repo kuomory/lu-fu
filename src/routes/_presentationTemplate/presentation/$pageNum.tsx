@@ -1,12 +1,11 @@
-import { createFileRoute, Navigate, useParams } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useAtomValue } from "jotai";
 import { slideAtom } from "../../../atoms/slideAtom";
-import { Text } from "@mantine/core";
 import { SlideTop } from "../../../components/Presentation/SlideTop";
 import { EndOfSlide } from "../../../components/Presentation/EndOfSlide";
 
 export const Route = createFileRoute(
-  "/_presentationTemplate/presentation/$pageNum",
+  "/_presentationTemplate/presentation/$pageNum"
 )({
   component: Page,
 });

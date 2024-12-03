@@ -10,7 +10,7 @@ export function ModeSwitcher() {
     (mode: Mode) => () => {
       setMode(mode);
     },
-    [mode, setMode]
+    [setMode]
   );
   return (
     <>

@@ -1,6 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import Top from "../components/TopPage/Top";
-import { SlideMock } from "../components/Presentation/SlideMock";
 import { Box } from "@mantine/core";
 import { SlideTop } from "../components/Presentation/SlideTop";
 
