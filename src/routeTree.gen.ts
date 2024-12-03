@@ -13,9 +13,10 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as PresentationTemplateImport } from './routes/_presentationTemplate'
 import { Route as EditTemplateImport } from './routes/_editTemplate'
-import { Route as PresentationIndexImport } from './routes/presentation/index'
-import { Route as PresentationPageNumImport } from './routes/presentation/$pageNum'
+import { Route as PresentationTemplatePresentationIndexImport } from './routes/_presentationTemplate/presentation/index'
+import { Route as PresentationTemplatePresentationPageNumImport } from './routes/_presentationTemplate/presentation/$pageNum'
 
 // Create Virtual Routes
 
@@ -25,6 +26,11 @@ const EditTemplateEditIndexLazyImport = createFileRoute(
 )()
 
 // Create/Update Routes
+
+const PresentationTemplateRoute = PresentationTemplateImport.update({
+  id: '/_presentationTemplate',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const EditTemplateRoute = EditTemplateImport.update({
   id: '/_editTemplate',
@@ -37,18 +43,6 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const PresentationIndexRoute = PresentationIndexImport.update({
-  id: '/presentation/',
-  path: '/presentation/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const PresentationPageNumRoute = PresentationPageNumImport.update({
-  id: '/presentation/$pageNum',
-  path: '/presentation/$pageNum',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const EditTemplateEditIndexLazyRoute = EditTemplateEditIndexLazyImport.update({
   id: '/edit/',
   path: '/edit/',
@@ -56,6 +50,20 @@ const EditTemplateEditIndexLazyRoute = EditTemplateEditIndexLazyImport.update({
 } as any).lazy(() =>
   import('./routes/_editTemplate/edit/index.lazy').then((d) => d.Route),
 )
+
+const PresentationTemplatePresentationIndexRoute =
+  PresentationTemplatePresentationIndexImport.update({
+    id: '/presentation/',
+    path: '/presentation/',
+    getParentRoute: () => PresentationTemplateRoute,
+  } as any)
+
+const PresentationTemplatePresentationPageNumRoute =
+  PresentationTemplatePresentationPageNumImport.update({
+    id: '/presentation/$pageNum',
+    path: '/presentation/$pageNum',
+    getParentRoute: () => PresentationTemplateRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -75,19 +83,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EditTemplateImport
       parentRoute: typeof rootRoute
     }
-    '/presentation/$pageNum': {
-      id: '/presentation/$pageNum'
-      path: '/presentation/$pageNum'
-      fullPath: '/presentation/$pageNum'
-      preLoaderRoute: typeof PresentationPageNumImport
+    '/_presentationTemplate': {
+      id: '/_presentationTemplate'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PresentationTemplateImport
       parentRoute: typeof rootRoute
     }
-    '/presentation/': {
-      id: '/presentation/'
+    '/_presentationTemplate/presentation/$pageNum': {
+      id: '/_presentationTemplate/presentation/$pageNum'
+      path: '/presentation/$pageNum'
+      fullPath: '/presentation/$pageNum'
+      preLoaderRoute: typeof PresentationTemplatePresentationPageNumImport
+      parentRoute: typeof PresentationTemplateImport
+    }
+    '/_presentationTemplate/presentation/': {
+      id: '/_presentationTemplate/presentation/'
       path: '/presentation'
       fullPath: '/presentation'
-      preLoaderRoute: typeof PresentationIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof PresentationTemplatePresentationIndexImport
+      parentRoute: typeof PresentationTemplateImport
     }
     '/_editTemplate/edit/': {
       id: '/_editTemplate/edit/'
@@ -113,19 +128,34 @@ const EditTemplateRouteWithChildren = EditTemplateRoute._addFileChildren(
   EditTemplateRouteChildren,
 )
 
+interface PresentationTemplateRouteChildren {
+  PresentationTemplatePresentationPageNumRoute: typeof PresentationTemplatePresentationPageNumRoute
+  PresentationTemplatePresentationIndexRoute: typeof PresentationTemplatePresentationIndexRoute
+}
+
+const PresentationTemplateRouteChildren: PresentationTemplateRouteChildren = {
+  PresentationTemplatePresentationPageNumRoute:
+    PresentationTemplatePresentationPageNumRoute,
+  PresentationTemplatePresentationIndexRoute:
+    PresentationTemplatePresentationIndexRoute,
+}
+
+const PresentationTemplateRouteWithChildren =
+  PresentationTemplateRoute._addFileChildren(PresentationTemplateRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '': typeof EditTemplateRouteWithChildren
-  '/presentation/$pageNum': typeof PresentationPageNumRoute
-  '/presentation': typeof PresentationIndexRoute
+  '': typeof PresentationTemplateRouteWithChildren
+  '/presentation/$pageNum': typeof PresentationTemplatePresentationPageNumRoute
+  '/presentation': typeof PresentationTemplatePresentationIndexRoute
   '/edit': typeof EditTemplateEditIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
-  '': typeof EditTemplateRouteWithChildren
-  '/presentation/$pageNum': typeof PresentationPageNumRoute
-  '/presentation': typeof PresentationIndexRoute
+  '': typeof PresentationTemplateRouteWithChildren
+  '/presentation/$pageNum': typeof PresentationTemplatePresentationPageNumRoute
+  '/presentation': typeof PresentationTemplatePresentationIndexRoute
   '/edit': typeof EditTemplateEditIndexLazyRoute
 }
 
@@ -133,8 +163,9 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/_editTemplate': typeof EditTemplateRouteWithChildren
-  '/presentation/$pageNum': typeof PresentationPageNumRoute
-  '/presentation/': typeof PresentationIndexRoute
+  '/_presentationTemplate': typeof PresentationTemplateRouteWithChildren
+  '/_presentationTemplate/presentation/$pageNum': typeof PresentationTemplatePresentationPageNumRoute
+  '/_presentationTemplate/presentation/': typeof PresentationTemplatePresentationIndexRoute
   '/_editTemplate/edit/': typeof EditTemplateEditIndexLazyRoute
 }
 
@@ -147,8 +178,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_editTemplate'
-    | '/presentation/$pageNum'
-    | '/presentation/'
+    | '/_presentationTemplate'
+    | '/_presentationTemplate/presentation/$pageNum'
+    | '/_presentationTemplate/presentation/'
     | '/_editTemplate/edit/'
   fileRoutesById: FileRoutesById
 }
@@ -156,15 +188,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   EditTemplateRoute: typeof EditTemplateRouteWithChildren
-  PresentationPageNumRoute: typeof PresentationPageNumRoute
-  PresentationIndexRoute: typeof PresentationIndexRoute
+  PresentationTemplateRoute: typeof PresentationTemplateRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   EditTemplateRoute: EditTemplateRouteWithChildren,
-  PresentationPageNumRoute: PresentationPageNumRoute,
-  PresentationIndexRoute: PresentationIndexRoute,
+  PresentationTemplateRoute: PresentationTemplateRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -179,8 +209,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_editTemplate",
-        "/presentation/$pageNum",
-        "/presentation/"
+        "/_presentationTemplate"
       ]
     },
     "/": {
@@ -192,11 +221,20 @@ export const routeTree = rootRoute
         "/_editTemplate/edit/"
       ]
     },
-    "/presentation/$pageNum": {
-      "filePath": "presentation/$pageNum.tsx"
+    "/_presentationTemplate": {
+      "filePath": "_presentationTemplate.tsx",
+      "children": [
+        "/_presentationTemplate/presentation/$pageNum",
+        "/_presentationTemplate/presentation/"
+      ]
     },
-    "/presentation/": {
-      "filePath": "presentation/index.tsx"
+    "/_presentationTemplate/presentation/$pageNum": {
+      "filePath": "_presentationTemplate/presentation/$pageNum.tsx",
+      "parent": "/_presentationTemplate"
+    },
+    "/_presentationTemplate/presentation/": {
+      "filePath": "_presentationTemplate/presentation/index.tsx",
+      "parent": "/_presentationTemplate"
     },
     "/_editTemplate/edit/": {
       "filePath": "_editTemplate/edit/index.lazy.tsx",

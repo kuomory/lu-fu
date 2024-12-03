@@ -1,7 +1,9 @@
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { slideAtom } from "../../atoms/slideAtom";
-import { Box } from "@mantine/core";
+import { Box, UnstyledButton } from "@mantine/core";
 import { ShapeObject } from "./ShapeObject";
+import { useCallback } from "react";
+import { useNavigate } from "@tanstack/react-router";
 
 type Props = {
   pageNum: number;
@@ -9,8 +11,12 @@ type Props = {
 
 export function SlideTop(props: Props) {
   const { pageNum } = props;
-  const [slide, setSlide] = useAtom(slideAtom);
+  const slide = useAtomValue(slideAtom);
   const focusPage = slide.pages[pageNum - 1];
+  const navigate = useNavigate();
+  const handleClickOverlay = useCallback(() => {
+    navigate({ to: `/presentation/${pageNum + 1}` });
+  }, [navigate, pageNum]);
 
   return (
     <>
@@ -44,6 +50,17 @@ export function SlideTop(props: Props) {
           ))}
         </svg>
       </Box>
+      <UnstyledButton
+        w="100vw"
+        h="100svh"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          zIndex: 2,
+        }}
+        onClick={handleClickOverlay}
+      />
     </>
   );
 }

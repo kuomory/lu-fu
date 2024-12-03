@@ -59,6 +59,42 @@ const testMock: Slide = {
         },
       ],
     },
+    {
+      objects: [
+        {
+          id: "aaa",
+          component: "polygon",
+          props: {
+            points: "0,0 1000,0 600,900 0,900",
+            fill: "#f0f0f0",
+          },
+        },
+        {
+          id: "bbb",
+          component: "text",
+          props: {
+            x: 800,
+            y: 420,
+            fontSize: 80,
+            alignmentBaseline: "central",
+            textAnchor: "middle",
+          },
+          children: "2ページ",
+        },
+        {
+          id: "ccc",
+          component: "text",
+          props: {
+            x: 800,
+            y: 520,
+            fontSize: 38,
+            alignmentBaseline: "central",
+            textAnchor: "middle",
+          },
+          children: "目",
+        },
+      ],
+    },
   ],
 };
 
