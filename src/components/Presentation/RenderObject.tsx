@@ -5,7 +5,7 @@ type Props = {
   object: SvgObject<any>;
 };
 
-export function ShapeObject(props: Props) {
+export function RenderObject(props: Props) {
   const { object } = props;
   const Component = object.component;
   return <Component {...object.props}>{object.children}</Component>;

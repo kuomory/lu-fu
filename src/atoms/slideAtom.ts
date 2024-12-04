@@ -10,6 +10,7 @@ export type SvgObject<T extends ElementType & string> = {
 };
 
 export type Page = {
+  id: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   objects: SvgObject<any>[];
   backgroundColor?: string;
@@ -25,6 +26,7 @@ const testMock: Slide = {
   title: "タイトル",
   pages: [
     {
+      id: "aaa",
       objects: [
         {
           id: "aaa",
@@ -61,6 +63,7 @@ const testMock: Slide = {
       ],
     },
     {
+      id: "bbb",
       objects: [
         {
           id: "aaa",

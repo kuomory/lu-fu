@@ -1,7 +1,7 @@
 import { useAtomValue } from "jotai";
 import { slideAtom } from "../../atoms/slideAtom";
 import { Box, UnstyledButton } from "@mantine/core";
-import { ShapeObject } from "./ShapeObject";
+import { RenderObject } from "./RenderObject";
 import { useCallback } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -46,7 +46,7 @@ export function SlideTop(props: Props) {
             fill={focusPage.backgroundColor ?? "white"}
           />
           {focusPage.objects.map((object) => (
-            <ShapeObject key={object.id} object={object} />
+            <RenderObject key={object.id} object={object} />
           ))}
         </svg>
       </Box>

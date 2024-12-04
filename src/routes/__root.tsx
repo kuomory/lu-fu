@@ -7,8 +7,8 @@ export const Route = createRootRoute({
     <>
       <AppShell
         header={{ height: "4rem" }}
-        navbar={{ width: "15%", breakpoint: "sm" }}
-        aside={{ width: "15%", breakpoint: "sm" }}
+        navbar={{ width: "200px", breakpoint: "xs" }}
+        // aside={{ width: "200px", breakpoint: "xs" }}
       >
         <Outlet />
         <TanStackRouterDevtools />
